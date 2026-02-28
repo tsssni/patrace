@@ -37,8 +37,25 @@
           default = pkgs.callPackage ./nix { };
         }
       );
+
+      devShells = mapSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          clangd = pkgs.mkShell {
+            shellHook = ''
+              export SHELL=nu
+            '';
+            packages = with pkgs; [
+              clang-tools
+            ];
+          };
+        }
+      );
     in
     {
-      inherit packages;
+      inherit packages devShells;
     };
 }

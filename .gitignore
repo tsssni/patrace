@@ -98,6 +98,8 @@ patrace/python/patracetools/patracetools.egg-info
 *.swp
 
 # IDE
+compile_commands.json
+.cache
 .vscode
 .idea
 .cxx

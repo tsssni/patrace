@@ -1,0 +1,18 @@
+InlayHints:
+  Enabled: false
+
+Completion:
+  HeaderInsertion: Never
+  ArgumentLists: Delimiters
+
+Diagnostics:
+  UnusedIncludes: None
+
+CompileFlags:
+  Add:
+    - "-isystem"
+    - "/nix/store/rgcirxfcjwmph81rx61fgq3ihg580bzr-android-sdk-ndk-bundle-21.1.6352462/libexec/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/include"
+    - "-isystem"
+    - "/nix/store/rgcirxfcjwmph81rx61fgq3ihg580bzr-android-sdk-ndk-bundle-21.1.6352462/libexec/android-sdk/ndk-bundle/sysroot/usr/include"
+    - "-isystem"
+    - "/nix/store/rgcirxfcjwmph81rx61fgq3ihg580bzr-android-sdk-ndk-bundle-21.1.6352462/libexec/android-sdk/ndk-bundle/sources/android/support/include"
