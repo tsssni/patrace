@@ -100,3 +100,5 @@ patrace/python/patracetools/patracetools.egg-info
 # IDE
 .vscode
 .idea
+.cxx
+.gradle

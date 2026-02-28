@@ -25,7 +25,7 @@ autoGenRetrace:
 
 callNdkBuild:autoGenRetrace
 	@echo 'Generate C header for NativeAPI.java'
-	ANDROID_JAR=$(shell dirname `which android`)/../platforms/android-${TARGET}/android.jar; \
+	ANDROID_JAR=$$ANDROID_SDK_ROOT/platforms/android-${TARGET}/android.jar; \
 	    javac -classpath $$ANDROID_JAR ./src/com/arm/pa/paretrace/NativeAPI.java; \
 	    javah -d jni -classpath $$ANDROID_JAR:src com.arm.pa.paretrace.NativeAPI
 .PHONY : callNdkBuild

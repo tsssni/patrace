@@ -124,7 +124,7 @@ ifeq ($(TARGET_ARCH_ABI),x86)
 LOCAL_CFLAGS            += -Wno-attributes
 endif
 
-LOCAL_STATIC_LIBRARIES := android_native_app_glue jsoncpp
+LOCAL_STATIC_LIBRARIES := jsoncpp
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../thirdparty/libcollector/external/include
 
 include $(BUILD_STATIC_LIBRARY)
@@ -137,8 +137,8 @@ LOCAL_C_INCLUDES := \
                     $(LOCAL_PATH)/../../thirdparty/libcollector/external/jsoncpp/include \
                     $(LOCAL_PATH)/../..
 
-LOCAL_LDLIBS    := -L$(SYSROOT)/usr/lib -nodefaultlibs -lc -lm -ldl -llog -latomic
-LOCAL_STATIC_LIBRARIES := android_native_app_glue collector_android
+LOCAL_LDLIBS    := -llog -latomic
+LOCAL_STATIC_LIBRARIES := collector_android
 LOCAL_LDFLAGS   += -Wl,-z,max-page-size=16384
 include $(BUILD_EXECUTABLE)
 
