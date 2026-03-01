@@ -382,7 +382,7 @@ def build_cmake(src_path, build_base_dir, install_base_dir):
                 check_log_erros(log_file)
 
 
-def build_android(src_path, product_names, install_base_dir=None):
+def build_android(src_path, product_names, install_base_dir=None, target_filter=None, abi=None):
     if not ndk_test():
         sys.stderr.write("""\
 ndk-build not found.
@@ -479,13 +479,19 @@ set and pointed to the directory where ndk-build resides."""
     # build with gradle
     gradlew_dir = os.path.join(product['android_root'],'gradlew')
     build_file = os.path.join(product['android_root'],'build.gradle')
-    run_command('{gradlew}  --build-file {buildfile} {buildtype}'.format(gradlew = gradlew_dir, buildfile=build_file, buildtype='assembleRelease --stacktrace'))
+    gradle_task = ':{target}:assembleRelease --stacktrace'.format(target=target_filter) if target_filter else 'assembleRelease --stacktrace'
+    abi_map = {'arm32': 'armeabi-v7a', 'arm64': 'arm64-v8a'}
+    if abi in abi_map:
+        gradle_task += ' -Pandroid.injected.build.abi={}'.format(abi_map[abi])
+    run_command('{gradlew}  --build-file {buildfile} {buildtype}'.format(gradlew=gradlew_dir, buildfile=build_file, buildtype=gradle_task))
 
     for product_name in product_names:
         product = products[product_name]
 
         # Install
         for target in product['targets']:
+            if target_filter and target['name'] != target_filter:
+                continue
             android_target_dir = os.path.join(product['android_root'], target['name'])
             target_install_dir = os.path.join(install_dir, target['name'])
             if not os.path.exists(target_install_dir):

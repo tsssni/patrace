@@ -24,6 +24,8 @@ if __name__ == '__main__':
     parser.add_argument('--ffi8', type=bool, default=False, help='build wayland_aarch64 with libffi.8.so. Default to build with libffi.6.so')
     parser.add_argument('--static', type=bool, default=False, help='build patrace statically. Defaults to \'false\'')
     parser.add_argument('--perfperapi', type=bool, default=False, help='build patrace with per gles api perf instrumentation. Defaults to \'false\'')
+    parser.add_argument('--target', default=None, choices=['egltrace', 'fakedriver', 'eglretrace', 'gleslayer'], help='Android only: build a single target instead of all. E.g. --target gleslayer')
+    parser.add_argument('--abi', default=None, choices=['arm32', 'arm64', 'both'], help='Android only: select ABI to build. arm32=armeabi-v7a, arm64=arm64-v8a, both=default')
     args = parser.parse_args()
 
     exclude = ['android', 'fbdev_x32', 'fbdev_x64', 'rhe6_x32', 'rhe6_x64']
@@ -61,7 +63,9 @@ if __name__ == '__main__':
         returncode = build_android(
             src_path=os.path.join(script_dir, '..'),
             product_names=[args.project],
-            install_base_dir=args.install_dir
+            install_base_dir=args.install_dir,
+            target_filter=args.target,
+            abi=args.abi
         )
     else:
         if not args.platform in linux_platforms:

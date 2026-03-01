@@ -165,7 +165,11 @@ def generateSourceFile(protos, folder, fname, pythonCmd, manual_imp_funcs, inclu
                 # is still called.
                 f.write('        if (!warned_{function_name}) DBG_LOG("Warning: Fakedriver/Gleslayer failed to get function pointer for {function_name}. eglSwapBuffers() will be called instead.\\n");\n'.format(**command))
                 f.write('        // Try calling normal eglSwapBuffers(). See autogencode.py for details why.\n')
+                f.write('#ifdef GLESLAYER\n')
+                f.write('        glesLayer_eglSwapBuffers(dpy, surface);\n')
+                f.write('#else\n')
                 f.write('        eglSwapBuffers(dpy, surface);\n')
+                f.write('#endif\n')
             else:
                 f.write('        if (!warned_{function_name}) DBG_LOG("Warning: Fakedriver/Gleslayer failed to get function pointer for {function_name}\\n");\n'.format(**command))
             f.write('        warned_{function_name} = true;\n'.format(**command))
@@ -198,8 +202,7 @@ def generateSourceFile(protos, folder, fname, pythonCmd, manual_imp_funcs, inclu
         f.write('{\n')
         f.write('    DBG_LOG("glesLayer_InitializeLayer called with layer_id %p get_next_layer_proc_address %p, pid(%d).\\n", layer_id, get_next_layer_proc_address, getpid());\n\n')
         f.write('    gLayerCollector[std::string(PATRACE_LAYER_NAME)] = &gPatraceLayer;\n\n')
-        f.write('    layer_init_next_proc_address(PATRACE_LAYER_NAME, layer_id, get_next_layer_proc_address);\n\n')
-        f.write('    layer_init_intercept_map();\n')
+        f.write('    layer_init_next_proc_address(PATRACE_LAYER_NAME, layer_id, get_next_layer_proc_address);\n')
         f.write('}\n\n')
 
         f.write('static EGLFuncPointer glesLayer_patrace_eglGPA(const char* funcName) \n')
